@@ -1,0 +1,46 @@
+.bank{background: url('bank-vector.jpg') no-repeat;padding-top: 55%;width: 100%;background-size: 400%}
+.bank.with-border{border: 1px solid #ddd;border-radius: 14px}
+.bank-bi{background-position: 0% 0%}
+.bank-ojk{background-position: 33.5% 0%}
+.bank-bri{background-position: 67% 0%}
+.bank-mandiri{background-position: 100% 0%}
+
+.bank-windu{background-position: 0% 12.5%}
+.bank-bni{background-position: 33.5% 12.5%}
+.bank-bca{background-position: 67% 12.5%}
+.bank-bjb{background-position: 100% 12.5%}
+
+.bank-cimb{background-position: 0% 25%}
+.bank-may{background-position: 33.5% 25%}
+.bank-hsbc{background-position: 67% 25%}
+.bank-mandiri-syariah{background-position: 100% 25%}
+
+.bank-btn{background-position: 0% 37.5%}
+.bank-panin{background-position: 33.5% 37.5%}
+.bank-btn-syariah{background-position: 67% 37.5%}
+.bank-bni-syariah{background-position: 100% 37.5%}
+
+.bank-bukopin{background-position: 0% 50%}
+.bank-riau-kepri{background-position: 33.5% 50%}
+.bank-ocbc-nisp{background-position: 67% 50%}
+.bank-qnb{background-position: 100% 50%}
+
+.bank-mnc{background-position: 0% 62.5%}
+.bank-index{background-position: 33.5% 62.5%}
+.bank-icbc{background-position: 67% 62.5%}
+.bank-common-wealth{background-position: 100% 62.5%}
+
+.bank-uob{background-position: 0% 75%}
+.bank-bri-syariah{background-position: 33.5% 75%}
+.bank-mestika{background-position: 67% 75%}
+.bank-nobu{background-position: 100% 75%}
+
+.bank-sinarmas{background-position: 0% 87.5%}
+.bank-artha-graha{background-position: 33.5% 87.5%}
+.bank-j-trust{background-position: 67% 87.5%}
+.bank-ekonomi{background-position: 100% 87.5%}
+
+.bank-robo{background-position: 0% 100%}
+.bank-permata{background-position: 33.5% 100%}
+.bank-mega{background-position: 67% 100%}
+.bank-danamon{background-position: 100% 100%}
