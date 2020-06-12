@@ -874,7 +874,7 @@ function get_default_stock(){
 			data:'',
 			success:function(data){
 				if (parseInt(data)>0) {
-					//$('[name="buy_product"] [type="submit"]').removeAttr('disabled');
+					$('[name="buy_product"] [type="submit"]').removeAttr('disabled');
 				}	
 				setTimeout(function(){
 					$('[product-stock-display]').css({'opacity':'1','-webkit-animation':"show_time .3s"});
