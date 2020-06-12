@@ -861,7 +861,7 @@ $(document).on('click','.p-option',function(event){
 })
 get_default_stock();
 function get_default_stock(){
-	$('[name="buy_product"] [type="submit"]').prop('disabled',true);
+	$('[name="buy_product"] [type="submit"]').prop("disabled",true);
 	if ($('[name="buy_product"]')!=undefined) {
 		var id_option = $('[name="buy_product"]').find('.p-option.active').attr('id-option'),
 			id_variant = $('[variant-option-on-product]').val(),
@@ -874,8 +874,7 @@ function get_default_stock(){
 			data:'',
 			success:function(data){
 				if (parseInt(data)>0) {
-					alert('sss')
-					$('[name="buy_product"] [type="submit"]').prop('disabled',false);
+					//$('[name="buy_product"] [type="submit"]').removeAttr('disabled');
 				}	
 				setTimeout(function(){
 					$('[product-stock-display]').css({'opacity':'1','-webkit-animation':"show_time .3s"});
