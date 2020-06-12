@@ -821,6 +821,7 @@ $(document).on('keyup','[transaksi-chate-qty-product-on-cart]',function(event){
 	},500)
 })
 $(document).on('change','[variant-option-on-product]',function(){
+	$('[name="buy_product"] [type="submit"]').prop("disabled",true);
 	event.preventDefault();
 	var id_option = $('[name="buy_product"]').find('.p-option.active').attr('id-option'),
 		id_variant = $(this).val(),
@@ -832,6 +833,9 @@ $(document).on('change','[variant-option-on-product]',function(){
 		url:link_url,
 		data:'',
 		success:function(data){
+			if (parseInt(data)>0) {
+				$('[name="buy_product"] [type="submit"]').removeAttr('disabled');
+			}	
 			setTimeout(function(){
 				$('[product-stock-display]').css({'opacity':'1','-webkit-animation':"show_time .5s"});
 				$('[product-stock-display]').html(data);
@@ -839,8 +843,20 @@ $(document).on('change','[variant-option-on-product]',function(){
 		}
 	})
 })
-
+$(document).on('input','[name="buy_product"] [name="qty"]',function(event){
+	event.preventDefault();
+	var qty_min = parseInt(document.querySelector('[product-stock-display]').innerHTML),
+		value = parseInt($(this).val());
+	$('[name="buy_product"] [type="submit"]').prop("disabled",true);
+	if (qty_min>0 && value>0 && qty_min>=value) {
+		$('[name="buy_product"] [type="submit"]').removeAttr('disabled');
+		console.log('true');
+	}else{
+		console.log('false');
+	}
+})
 $(document).on('click','.p-option',function(event){
+	$('[name="buy_product"] [type="submit"]').prop("disabled",true);
 	event.preventDefault();
 	var id_option = $('[name="buy_product"]').find('.p-option.active').attr('id-option'),
 		id_variant = $('[variant-option-on-product]').val(),
@@ -852,6 +868,9 @@ $(document).on('click','.p-option',function(event){
 		url:link_url,
 		data:'',
 		success:function(data){
+			if (parseInt(data)>0) {
+				$('[name="buy_product"] [type="submit"]').removeAttr('disabled');
+			}	
 			setTimeout(function(){
 				$('[product-stock-display]').css({'opacity':'1','-webkit-animation':"show_time .5s"});
 				$('[product-stock-display]').html(data);
