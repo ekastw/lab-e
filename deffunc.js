@@ -873,8 +873,8 @@ function get_default_stock(){
 			url:link_url,
 			data:'',
 			success:function(data){
-				alert('sss')
 				if (parseInt(data)>0) {
+					alert('sss')
 					$('[name="buy_product"] [type="submit"]').prop('disabled',false);
 				}	
 				setTimeout(function(){
