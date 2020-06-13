@@ -1,3 +1,383 @@
+// ----------- custom_confirm
+var crm_res = '<div class="confirm-result" style="text-transform:capitalize;box-shadow:1px 1px rgba(0,0,0,0.6);display:none;position:fixed;padding:10px 20px;right:20px;top:20px;z-index:9999;color:White;opacity:0.9;font-size:1em">message after proccessing</div>',
+    crm = '<div class="modal fade-in" id="modal-confirm"><div class="modal-dialog modal-sm"><div class="modal-content" style="width:100%"><div class="modal-body" style="border-radius:4px 4px 0px 0px;opacity:.9"><h4 style="padding:0px;margin:0px"><b modal-title>Warning !!!</b></h4><h5 modal-action>Delete Data?</h5><span class="fa fa-warning" style="font-size: 4em;position: absolute;right: 10px;top: 10px"></span><hr class="no-margin"><h6 modal-msg align="center" style="margin-top:14px"></h6></div><div class="modal-footer" style="padding:4px"><button class="btn btn-default btn-cancel" onclick="Cconfirm.no(event)">Cancel</button><button class="btn btn-light btn-confirm" onclick="Cconfirm.yes(event)">Hapus</button></div></div></div></div>',
+    def_link_name,
+    def_link_url,
+    type,
+    confirm_msg='',
+    Cconfirm = new cConfirm();
+
+$('body').append(crm_res+crm);
+
+
+
+function cConfirm(){
+  //bg color
+  $('#modal-confirm .modal-body').removeClass('bg-warning').removeClass('bg-danger').removeClass('bg-info');
+  //btn confirm
+  $('#modal-confirm .btn-confirm').removeClass('btn-light');
+  $('#modal-confirm .btn-confirm').removeClass('btn-danger');
+  $('#modal-confirm .btn-confirm').removeClass('btn-warning');
+  $('#modal-confirm .btn-confirm').removeClass('btn-primary');
+  //confirm msg
+  $('#modal-confirm [modal-msg]').html('');
+  //confirm title
+  $('#modal-confirm [modal-title]').html('');
+  if (confirm_msg!='' && confirm_msg!=undefined) {
+    $('#modal-confirm [modal-msg]').html(confirm_msg);
+  }else{
+    $('#modal-confirm [modal-msg]').html('Anda Akan Menghapus Data Ini?');    
+  }if (type=='alert') {
+    $('#modal-confirm .modal-body').addClass('bg-danger').addClass("text-white");
+    $('#modal-confirm [modal-action]').html('<h4 class="no-margin no-padding">Delete</h4>');
+    $('#modal-confirm [modal-title]').html('Warning !!!');
+
+    $('#modal-confirm .btn-confirm').addClass('btn-danger');
+    $('#modal-confirm .btn-confirm').html('Delete');
+  }if (type=='info') {
+    $('#modal-confirm .modal-body').addClass('bg-info').addClass("text-white");
+    $('#modal-confirm [modal-action]').html('<h4 class="no-margin no-padding">Update</h4>');
+    $('#modal-confirm [modal-title]').html('Change !!!');
+
+    $('#modal-confirm .btn-confirm').addClass('btn-primary');
+    $('#modal-confirm .btn-confirm').html('Update');
+  }if (def_link_name!=null && def_link_url!=null) {
+    $('#modal-confirm').modal('show');
+    $('#modal-confirm .btn-confirm').focus();
+    $('#modal-confirm .btn-confirm').css({'border':'1px solid rgba(255,255,255,.8)'});
+  };
+  this.yes = function(event){
+    event.preventDefault();
+    DoIt(def_link_name,def_link_url);
+    $('#modal-confirm').modal('hide');
+  }
+  this.no = function(event){
+    event.preventDefault();
+    $('#modal-confirm').modal('hide');
+  }
+  confirm_msg='';
+}
+
+function confirm_result(msg,bg_color,interval_data){
+  var target_id = $('.confirm-result');
+  target_id.fadeIn();
+  interval = 3000;
+  target_id.css({'background':'DodgerBlue'});
+  if (interval_data!=undefined || interval_data!=null || interval_data!='') {
+    interval = interval_data;
+  }if (bg_color!=undefined || bg_color!=null || bg_color!='') {
+    target_id.css({'background':'red'}); 
+    if (bg_color==1 || bg_color==11 || bg_color==111) {
+      target_id.css({'background':'LimeGreen'});      
+    }if (bg_color==2 || bg_color==22 || bg_color==222) {
+      target_id.css({'background':'orange'});      
+    }if (bg_color==3 || bg_color==33 || bg_color==333) {
+      target_id.css({'background':'red'});      
+    }
+  }if (msg!=undefined || msg !=null || msg!='') {
+    target_id.html(msg);
+  }
+  setTimeout(function(){ 
+    target_id.fadeOut();
+  }, interval);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+// ------------ pilih data
+var bank_option_ops = '';
+function bank_option(){
+	var link_url = base_url+'json_data/bank?function=get_api',
+		target_div = $('.bank_option');
+	$.ajax({
+		type:"GET",
+		url:link_url,
+		data:'',
+		success:function(data){
+			var result = JSON.parse(data),
+				hasil = '';
+			if (result.length>0) {
+				$.each(result,function(key,val){
+					hasil += "<option value='"+val.id+"'>"+val.bank_name+" | "+val.account_name+" | "+val.account_number+"</option>";
+				});
+			}else{
+				hasil += '<option value="all" disabled>No Data</option>';				
+			}
+			bank_option_ops = hasil;
+			target_div.html(hasil);
+		}
+	})
+}
+var categories_option_ops = '';
+function categories_option(){
+	var link_url = base_url+'json_data/product_categories?function=get_api',
+		target_div = $('.categories_option');
+	$.ajax({
+		type:"GET",
+		url:link_url,
+		data:'',
+		success:function(data){
+			var result = JSON.parse(data),
+				hasil = '';
+			if (result.length>0) {
+				hasil += '<option value="all">Semua Kategori</option>';
+				$.each(result,function(key,val){
+					hasil += "<option value='"+val.id+"' class='text-uppercase'>"+val.value+"</option>";
+				});
+			}else{
+				hasil += '<option value="all" disabled>No Data</option>';			
+			}
+			categories_option_ops = hasil;
+			target_div.html(hasil);
+		}
+	})
+}
+function courier_option(){
+	var link_url = base_url+'json_data/courier',
+		target_div = $('.courier_option');
+		target_div.html('<option disabled selected>Loading Kurir...</option>');
+	$.ajax({
+		type:"GET",
+		url:link_url,
+		data:'',
+		success:function(data){
+			var data = JSON.parse(data),
+				hasil = '';
+			if (data.length>0) {
+				hasil += '<option value="">Pilih Kurir</option>';
+				$.each(data,function(key,val){
+					hasil += '<option value="'+val.id+'">'+val.courier_cd+'</option>';
+				});
+			}
+			province_ops = hasil;
+			target_div.html(hasil);
+		},error:function(data){
+			data.responseText();
+		}
+	})	
+}
+function courier_cd_option(){
+	var link_url = base_url+'json_data/courier',
+		target_div = $('.courier_cd_option');
+		target_div.html('<option disabled selected>Loading Kurir...</option>');
+	$.ajax({
+		type:"GET",
+		url:link_url,
+		data:'',
+		success:function(data){
+			var data = JSON.parse(data),
+				hasil = '';
+			if (data.length>0) {
+				hasil += '<option value="">Pilih Kurir</option>';
+				$.each(data,function(key,val){
+					hasil += '<option value="'+val.courier_cd+'">'+val.courier_cd+'</option>';
+				});
+			}
+			province_ops = hasil;
+			target_div.html(hasil);
+		},error:function(data){
+			data.responseText();
+		}
+	})	
+}
+var province_ops = '';
+function province_option(id,target_div,target_province){
+	var get = [];
+	if (parseInt(id)>0) {
+		get.push('id='+id);
+	}if (get.length>0) {
+		get = '?'+get.join('&');
+	}if (get.length==0) {
+		get = '';
+	}if (target_div=='' || target_div==undefined) {
+		target_div = '.province_option';
+	}
+	var link_url = base_url+'json_data/province'+get,
+		target_div = $(target_div);
+		target_div.html('<option disabled selected>Loading Provinsi...</option>');
+	$.ajax({
+		type:"GET",
+		url:link_url,
+		data:'',
+		success:function(data){
+			if (data!='cURL Error #:Could not resolve host: pro.rajaongkir.com') {
+				var data = JSON.parse(data),
+					hasil = '';
+				if (data.rajaongkir.status.code==200) {
+					if (data.rajaongkir.results.length>0) {
+						hasil += '<option value="">Pilih Provinsi</option>';
+						$.each(data.rajaongkir.results,function(key,val){
+							var sel = '';
+							if (target_province==val.province_id) {
+								sel = 'selected';
+							}
+							hasil += '<option value="'+val.province_id+'" '+sel+'>'+val.province+'</option>';
+						});
+					}else{
+						hasil += '<option value="all" disabled>No Data</option>';				
+					}
+				}
+				province_ops = hasil;
+				target_div.html(hasil);
+			}else{
+				target_div.html('<option disabled selected>data tidak ditemukan</option>');
+			}
+		},error:function(data){
+			data.responseText();
+		}
+	})
+}
+var city_ops = '';
+function city_option(province_id,city_id,target_div,target_city){
+	var get = [];
+	if (parseInt(city_id)>0) {
+		get.push('id='+city_id);
+	}if (parseInt(province_id)>0) {
+		get.push('province='+province_id);
+	}if (get.length>0) {
+		get = '?'+get.join('&');
+	}if (get.length==0) {
+		get = '';
+	}if (target_div=='' && target_div==undefined) {
+		target_div = '.city_option';
+	}
+	var link_url = base_url+'json_data/city'+get,
+		target_div = $(target_div);
+		target_div.html('<option disabled selected>Loading Kabupaten...</option>');
+	$.ajax({
+		type:"GET",
+		url:link_url,
+		data:'',
+		success:function(data){
+			if (data!='cURL Error #:Could not resolve host: pro.rajaongkir.com') {
+				var data = JSON.parse(data),
+					hasil = '';
+				if (data.rajaongkir.status.code==200) {
+					if (data.rajaongkir.results.length>0) {
+						hasil += '<option value="">Pilih Kabupaten</option>';
+						$.each(data.rajaongkir.results,function(key,val){
+							var sel = '';
+							if (val.city_id==target_city) {
+								sel = 'selected';
+							}
+							hasil += '<option value="'+val.city_id+'" '+sel+'>'+val.city_name+'</option>';
+						});
+					}else{
+						hasil += '<option value="all" disabled>No Data</option>';				
+					}
+				}
+				city_ops = hasil;
+				target_div.html(hasil);
+			}else{
+				target_div.html('<option disabled selected>data tidak ditemukan</option>');
+			}
+		}
+	})
+}
+var subdistrict_ops = '';
+function subdistrict_option(city,target_div,target_subdisctrict){
+	var get = [];
+	if (parseInt(city)>0) {
+		get.push('city='+city);
+	}if (get.length>0) {
+		get = '?'+get.join('&');
+	}if (get.length==0) {
+		get = '';
+	}if (target_div=='' || target_div==undefined) {
+		target_div = '.subdistrict_option';
+	}
+	var link_url = base_url+'json_data/subdistrict'+get,
+		target_div = $(target_div);
+		target_div.html('<option disabled selected>Loading Kecamatan...</option>');
+	$.ajax({
+		type:"GET",
+		url:link_url,
+		data:'',
+		success:function(data){
+			if (data!='cURL Error #:Could not resolve host: pro.rajaongkir.com') {			
+				var data = JSON.parse(data),
+					hasil = '';
+				if (data.rajaongkir.status.code==200) {
+					if (data.rajaongkir.results.length>0) {
+						hasil += '<option value="">Pilih Kecamatan</option>';
+						$.each(data.rajaongkir.results,function(key,val){
+							var sel = '';
+							if (val.subdistrict_id==target_subdisctrict) {
+								sel = 'selected';
+							}
+							hasil += '<option value="'+val.subdistrict_id+'" '+sel+'>'+val.subdistrict_name+'</option>';
+						});
+					}else{
+						hasil += '<option value="all" disabled>No Data</option>';				
+					}
+				}
+				subdistrict_ops = hasil;
+				target_div.html(hasil);
+			}else{
+				target_div.html('<option disabled selected>data tidak ditemukan</option>');
+			}
+		}
+	})
+}
+function addplaceholder(target_div,placeholder){
+	$(target_div).each(function(){
+		if ($(this).hasClass("select2")==true) {
+			$(this).prepend($("<option></option>").attr({"value":'all'}).text(placeholder));
+			$(this).attr('style','color:DimGrey;text-transform:bold;padding:2px 4px;');
+			$(this).val('all').trigger('change');
+		}else{
+			$(this).prepend($("<option></option>").attr({"value":'all'}).text(placeholder));
+			$(this).attr('style','color:DimGrey;text-transform:bold;padding:2px 4px;');
+			$(this).val('all').trigger('change');
+		}
+	});	
+}
+
+
+///-------------------- load scrooled ------------------------
+(function($) {
+    $.fn.loadScroll = function(duration) {
+        var $window = $(window),images = this,inview,loaded;
+        images.one('loadScroll', function() {
+            if (this.getAttribute('data-src')) {
+                this.setAttribute('src',this.getAttribute('data-src'));
+                this.removeAttribute('data-src');
+                if (duration) {
+                    $(this).hide().fadeIn(duration).removeAttr('style').addClass('lazy-out');
+                    //$(this).hide().fadeIn(duration).add('img').removeAttr('style').addClass('lazy-out');
+                } else return false;
+            }
+        });
+        function lazy_load_image(){
+            inview = images.filter(function() {
+                var a = $window.scrollTop(),
+                    b = $window.height(),
+                    c = $(this).offset().top,
+                    d = $(this).height();
+                return c + d >= a && c <= a + b;
+            });            
+            loaded = inview.trigger('loadScroll');
+            images = images.not(loaded);   
+        }
+        $window.scroll(function() {
+            lazy_load_image();                  
+        });
+        $window.ready(function() {
+            lazy_load_image();           
+        })        
+    };
+    
+})(jQuery);
+
 window.addEventListener('click', function(e){
 	if ($('[show-sosmed-icon]').length>0) {
 	if (document.querySelector('[show-sosmed-icon]').contains(e.target)==true){
@@ -1417,3 +1797,196 @@ $(document).on('submit','[shipment-tracking]',function(event){
     });
 
 })
+
+
+
+
+
+
+
+
+
+
+/// result_msg
+function after_submit(form_name,data){
+	//saldo
+	if (form_name=='edit_top_up') {
+		var val = JSON.parse(data);
+		if (val.data!=null && val.data.id!=undefined) {
+			$('[name="crud_top_up"] [name="id"]').val(val.data.id);
+			$('[name="crud_top_up"] [name="id_bank"]').val(val.data.id_bank);
+			$('[name="crud_top_up"] [name="amount"]').val(convert_Rp(val.data.amount));
+		}if (val.files!=undefined) {
+			render_all_image_top_up(val.files);			
+		}
+	}if (form_name=='crud_top_up') {
+		if (data=='1' || data=='11') {
+			$('#modal_crud_top_up').modal('hide');
+			default_func(decodeURI(refresh_location(1)));
+		}
+	}if (form_name=='delete_top_up') {
+		if (data=='1' || data=='11') {
+			$('#modal_crud_top_up').modal('hide');
+			default_func(decodeURI(refresh_location(1)));
+		}		
+	}
+
+
+	//profile
+	if (form_name=='profile_update') {
+		if (data!=undefined) {
+			if (data=='1') {
+				confirm_result("Profile berhasil di update");
+			}
+		}
+	}
+	//transaksi	
+	if (form_name=='transaksi_delete_inv') {
+		default_func(decodeURI(refresh_location(1)));		
+	}if (form_name=='crud_bukti_transfer') {
+		$("#modal_bukti_transfer").modal('hide');
+		default_func(decodeURI(refresh_location(1)));
+	}if (form_name=='delete_transfer_files') {
+		var data = JSON.parse(data);
+		if (data.result!=undefined) {
+			if (data.id_file!=undefined) {
+				$('[file-bukti-transfer-'+data.id_file+']').remove();
+			}
+		}if ($('#file_list_paper img').length==0) {
+			$('#file_list_paper').append(no_transfer_files)
+		}
+	}if (form_name=='transaksi_delete_from_cart') {
+		var data = JSON.parse(data);
+		if (data.id!=undefined) {
+			$('[detail-item-in-cart-'+data.id+']').remove();
+			render_cart_data();
+			render_cart_btn();
+			get_product_in_cart(id);
+			get_cart_detail(tmp_link_url_detail_transaksi,true);
+		}
+	}if (form_name=='delete_item_cart') {
+		var data = JSON.parse(data);
+		if (data.result=='1' && data.result!=undefined) {
+			if (typeof default_func=='function') {
+				default_func(decodeURI(refresh_location(1)));
+			};
+			if (data.item_left==0) {
+				if ($('#modal_cart_detail').length>0) {
+					$('#modal_cart_detail').modal('hide');
+				}if ($('[load-cart-list]').length>0) {
+					$('[load-cart-list]').html("<h3 align='center' style='margin:50px 0px;border:1px solid #ddd;padding:30px 0px'><label>Tidak ada item dalam keranjang.<br>Kembali ke halaman awal <br><span timeout>5</span></label></h3>");
+					var timeout = 5;
+					setInterval(function(){
+						timeout-=1;
+						$('[load-cart-list] [timeout]').html(timeout);
+					},1000);
+					setTimeout(function(){
+						location.href = base_url;
+					},5500)
+				}
+			}else{
+				confirm_result("Item berhasil dihapus",1,1000);
+				var target = $('[total-cart-on-transaction-'+data.id_trans+'],[total-weight-cart-on-transaction-'+data.id_trans+']');
+				target.css({'opacity':'0','-webkit-animation':"die_time .3s"});
+				setTimeout(function(){	
+					$('[single-item-on-cart-list-'+data.id+']').remove();
+					$('[total-cart-on-transaction-'+data.id_trans+']').html(convert_Rp(data.cart_price));
+					$('[total-weight-cart-on-transaction-'+data.id_trans+']').html(data.cart_weight);					
+					target.css({'opacity':'1','-webkit-animation':"show_time .5s"});
+				},300)
+			}
+		}
+	}
+
+
+	if (form_name=='check_out_transaction') {
+		var inv = $('[name="check_out_transaction"]').attr("inv-num");
+		if (data=='1' || data=='11') {
+			location.href = base_url+'keranjang?inv='+inv+'&final'
+		}
+	}
+	if (form_name=='delete_from_cart') {
+		var data = JSON.parse(data);
+		if (data.id!=undefined) {
+			$('[detail-item-in-cart-'+data.id+']').remove();
+			render_cart_data();
+			render_cart_btn();
+			get_product_in_cart(id);						
+		}
+	}if (form_name=='message-form') {
+		open_captcha();
+		var result = JSON.parse(data);
+		if (result.result!=undefined) {
+			if (result.result=='1') {
+				$('[name="'+form_name+'"]').trigger('reset');
+			}
+			confirm_result(result.message);
+		}
+	}if (form_name=='employee-reg') {
+		open_captcha();
+		var result = JSON.parse(data);
+		if (result.result!=undefined) {
+			if (result.result=='1') {
+				$('[name="'+form_name+'"]').trigger('reset');
+			}
+			confirm_result(result.message);
+		}
+	}if (form_name=='buy_product') {
+		var data = JSON.parse(data);
+		if (data.result!=undefined) {
+			if (data.result=='1') {
+				render_form_btn();
+				render_cart_btn();
+				var id = product_in_cart.attr('id');
+				get_product_in_cart(id);
+				render_cart_data();
+				$('#modal-cart-list').modal('show');
+			}			
+		}
+	}if (form_name=='log_verify') {
+		var result = JSON.parse(data);
+		if (result.hasil!=undefined) {
+			if (result.hasil=='1') {
+				setTimeout(function(){
+					location.href = result.base_url;
+				},2000)
+			}if (result.hasil=='2') {
+				confirm_result("Username atau password tidak sesuai",'2',3000);
+				$('[name="log_verify"] [name="username"]').focus();
+				$('[name="log_verify"] [name="captcha"]').val('');
+				open_captcha();
+			}if (result.hasil=='911') {
+				open_captcha();
+				$('[name="log_verify"] [name="captcha"]').val('').focus();
+				confirm_result("Captcha tidak sesuai",'2',3000);
+			}
+		}
+	}if (form_name=='crud_testimony') {
+		if (data=='1') {
+			confirm_result("Testimony anda berhasil terkirim",1,3000);
+		}else if (data=='2') {
+			confirm_result("Testimony anda gagal terkirim",2,3000);
+		}else if (data=='3') {
+			confirm_result("Tidak bisa mengirim testimony",2,3000);
+		}else if (data=='4') {
+			confirm_result("Hanya dapat mengirim 1 testimony perhari",2,3000);
+		}else{
+			$('#modal-user-log').modal('show');
+			confirm_result("Anda harus login terlebih dahulu",2,3000);			
+		}
+		$("[name='crud_testimony']").trigger('reset');
+	}if (form_name=='user_message_footer') {
+		if (data=='1') {
+			confirm_result("Pesan anda berhasil terkirim",1,3000);
+		}else if (data=='2') {
+			confirm_result("Pesan anda gagal terkirim",2,3000);
+		}else if (data=='3') {
+			confirm_result("Tidak bisa mengirim pesan",2,3000);
+		}else if (data=='4') {
+			confirm_result("Pesan gagal terkirim",2,3000);
+		}
+		open_captcha();
+		$("[name='user_message_footer']").trigger('reset');	
+		$("[name='user_message_footer'] [name='captcha']").val('');		
+	}
+}
