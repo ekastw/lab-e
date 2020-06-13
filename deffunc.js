@@ -793,8 +793,10 @@ $(document).on('submit','[search-box]',function(event){
 	}
 })
 
+$(document).ready(function(){
+  $('.lazy-load').loadScroll(1000);
+})
 
-$('.lazy-load').loadScroll(1000);
 $('body').append("<div class='modal fade-in' id='view-detail-data'><div class='modal-content'><div class='modal-body'><button type='button' class='close' data-dismiss='modal'>&times;</button><div class='content-detail'></div></div></div></div>")
 const navSlide = () => {
 	const body = document.querySelector('body');
