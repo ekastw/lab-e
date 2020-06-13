@@ -1,3 +1,4 @@
+
 // ----------- custom_confirm
 var crm_res = '<div class="confirm-result" style="text-transform:capitalize;box-shadow:1px 1px rgba(0,0,0,0.6);display:none;position:fixed;padding:10px 20px;right:20px;top:20px;z-index:9999;color:White;opacity:0.9;font-size:1em">message after proccessing</div>',
     crm = '<div class="modal fade-in" id="modal-confirm"><div class="modal-dialog modal-sm"><div class="modal-content" style="width:100%"><div class="modal-body" style="border-radius:4px 4px 0px 0px;opacity:.9"><h4 style="padding:0px;margin:0px"><b modal-title>Warning !!!</b></h4><h5 modal-action>Delete Data?</h5><span class="fa fa-warning" style="font-size: 4em;position: absolute;right: 10px;top: 10px"></span><hr class="no-margin"><h6 modal-msg align="center" style="margin-top:14px"></h6></div><div class="modal-footer" style="padding:4px"><button class="btn btn-default btn-cancel" onclick="Cconfirm.no(event)">Cancel</button><button class="btn btn-light btn-confirm" onclick="Cconfirm.yes(event)">Hapus</button></div></div></div></div>',
@@ -87,297 +88,6 @@ function confirm_result(msg,bg_color,interval_data){
 
 
 
-
-
-
-
-
-
-// ------------ pilih data
-var bank_option_ops = '';
-function bank_option(){
-	var link_url = base_url+'json_data/bank?function=get_api',
-		target_div = $('.bank_option');
-	$.ajax({
-		type:"GET",
-		url:link_url,
-		data:'',
-		success:function(data){
-			var result = JSON.parse(data),
-				hasil = '';
-			if (result.length>0) {
-				$.each(result,function(key,val){
-					hasil += "<option value='"+val.id+"'>"+val.bank_name+" | "+val.account_name+" | "+val.account_number+"</option>";
-				});
-			}else{
-				hasil += '<option value="all" disabled>No Data</option>';				
-			}
-			bank_option_ops = hasil;
-			target_div.html(hasil);
-		}
-	})
-}
-var categories_option_ops = '';
-function categories_option(){
-	var link_url = base_url+'json_data/product_categories?function=get_api',
-		target_div = $('.categories_option');
-	$.ajax({
-		type:"GET",
-		url:link_url,
-		data:'',
-		success:function(data){
-			var result = JSON.parse(data),
-				hasil = '';
-			if (result.length>0) {
-				hasil += '<option value="all">Semua Kategori</option>';
-				$.each(result,function(key,val){
-					hasil += "<option value='"+val.id+"' class='text-uppercase'>"+val.value+"</option>";
-				});
-			}else{
-				hasil += '<option value="all" disabled>No Data</option>';			
-			}
-			categories_option_ops = hasil;
-			target_div.html(hasil);
-		}
-	})
-}
-function courier_option(){
-	var link_url = base_url+'json_data/courier',
-		target_div = $('.courier_option');
-		target_div.html('<option disabled selected>Loading Kurir...</option>');
-	$.ajax({
-		type:"GET",
-		url:link_url,
-		data:'',
-		success:function(data){
-			var data = JSON.parse(data),
-				hasil = '';
-			if (data.length>0) {
-				hasil += '<option value="">Pilih Kurir</option>';
-				$.each(data,function(key,val){
-					hasil += '<option value="'+val.id+'">'+val.courier_cd+'</option>';
-				});
-			}
-			province_ops = hasil;
-			target_div.html(hasil);
-		},error:function(data){
-			data.responseText();
-		}
-	})	
-}
-function courier_cd_option(){
-	var link_url = base_url+'json_data/courier',
-		target_div = $('.courier_cd_option');
-		target_div.html('<option disabled selected>Loading Kurir...</option>');
-	$.ajax({
-		type:"GET",
-		url:link_url,
-		data:'',
-		success:function(data){
-			var data = JSON.parse(data),
-				hasil = '';
-			if (data.length>0) {
-				hasil += '<option value="">Pilih Kurir</option>';
-				$.each(data,function(key,val){
-					hasil += '<option value="'+val.courier_cd+'">'+val.courier_cd+'</option>';
-				});
-			}
-			province_ops = hasil;
-			target_div.html(hasil);
-		},error:function(data){
-			data.responseText();
-		}
-	})	
-}
-var province_ops = '';
-function province_option(id,target_div,target_province){
-	var get = [];
-	if (parseInt(id)>0) {
-		get.push('id='+id);
-	}if (get.length>0) {
-		get = '?'+get.join('&');
-	}if (get.length==0) {
-		get = '';
-	}if (target_div=='' || target_div==undefined) {
-		target_div = '.province_option';
-	}
-	var link_url = base_url+'json_data/province'+get,
-		target_div = $(target_div);
-		target_div.html('<option disabled selected>Loading Provinsi...</option>');
-	$.ajax({
-		type:"GET",
-		url:link_url,
-		data:'',
-		success:function(data){
-			if (data!='cURL Error #:Could not resolve host: pro.rajaongkir.com') {
-				var data = JSON.parse(data),
-					hasil = '';
-				if (data.rajaongkir.status.code==200) {
-					if (data.rajaongkir.results.length>0) {
-						hasil += '<option value="">Pilih Provinsi</option>';
-						$.each(data.rajaongkir.results,function(key,val){
-							var sel = '';
-							if (target_province==val.province_id) {
-								sel = 'selected';
-							}
-							hasil += '<option value="'+val.province_id+'" '+sel+'>'+val.province+'</option>';
-						});
-					}else{
-						hasil += '<option value="all" disabled>No Data</option>';				
-					}
-				}
-				province_ops = hasil;
-				target_div.html(hasil);
-			}else{
-				target_div.html('<option disabled selected>data tidak ditemukan</option>');
-			}
-		},error:function(data){
-			data.responseText();
-		}
-	})
-}
-var city_ops = '';
-function city_option(province_id,city_id,target_div,target_city){
-	var get = [];
-	if (parseInt(city_id)>0) {
-		get.push('id='+city_id);
-	}if (parseInt(province_id)>0) {
-		get.push('province='+province_id);
-	}if (get.length>0) {
-		get = '?'+get.join('&');
-	}if (get.length==0) {
-		get = '';
-	}if (target_div=='' && target_div==undefined) {
-		target_div = '.city_option';
-	}
-	var link_url = base_url+'json_data/city'+get,
-		target_div = $(target_div);
-		target_div.html('<option disabled selected>Loading Kabupaten...</option>');
-	$.ajax({
-		type:"GET",
-		url:link_url,
-		data:'',
-		success:function(data){
-			if (data!='cURL Error #:Could not resolve host: pro.rajaongkir.com') {
-				var data = JSON.parse(data),
-					hasil = '';
-				if (data.rajaongkir.status.code==200) {
-					if (data.rajaongkir.results.length>0) {
-						hasil += '<option value="">Pilih Kabupaten</option>';
-						$.each(data.rajaongkir.results,function(key,val){
-							var sel = '';
-							if (val.city_id==target_city) {
-								sel = 'selected';
-							}
-							hasil += '<option value="'+val.city_id+'" '+sel+'>'+val.city_name+'</option>';
-						});
-					}else{
-						hasil += '<option value="all" disabled>No Data</option>';				
-					}
-				}
-				city_ops = hasil;
-				target_div.html(hasil);
-			}else{
-				target_div.html('<option disabled selected>data tidak ditemukan</option>');
-			}
-		}
-	})
-}
-var subdistrict_ops = '';
-function subdistrict_option(city,target_div,target_subdisctrict){
-	var get = [];
-	if (parseInt(city)>0) {
-		get.push('city='+city);
-	}if (get.length>0) {
-		get = '?'+get.join('&');
-	}if (get.length==0) {
-		get = '';
-	}if (target_div=='' || target_div==undefined) {
-		target_div = '.subdistrict_option';
-	}
-	var link_url = base_url+'json_data/subdistrict'+get,
-		target_div = $(target_div);
-		target_div.html('<option disabled selected>Loading Kecamatan...</option>');
-	$.ajax({
-		type:"GET",
-		url:link_url,
-		data:'',
-		success:function(data){
-			if (data!='cURL Error #:Could not resolve host: pro.rajaongkir.com') {			
-				var data = JSON.parse(data),
-					hasil = '';
-				if (data.rajaongkir.status.code==200) {
-					if (data.rajaongkir.results.length>0) {
-						hasil += '<option value="">Pilih Kecamatan</option>';
-						$.each(data.rajaongkir.results,function(key,val){
-							var sel = '';
-							if (val.subdistrict_id==target_subdisctrict) {
-								sel = 'selected';
-							}
-							hasil += '<option value="'+val.subdistrict_id+'" '+sel+'>'+val.subdistrict_name+'</option>';
-						});
-					}else{
-						hasil += '<option value="all" disabled>No Data</option>';				
-					}
-				}
-				subdistrict_ops = hasil;
-				target_div.html(hasil);
-			}else{
-				target_div.html('<option disabled selected>data tidak ditemukan</option>');
-			}
-		}
-	})
-}
-function addplaceholder(target_div,placeholder){
-	$(target_div).each(function(){
-		if ($(this).hasClass("select2")==true) {
-			$(this).prepend($("<option></option>").attr({"value":'all'}).text(placeholder));
-			$(this).attr('style','color:DimGrey;text-transform:bold;padding:2px 4px;');
-			$(this).val('all').trigger('change');
-		}else{
-			$(this).prepend($("<option></option>").attr({"value":'all'}).text(placeholder));
-			$(this).attr('style','color:DimGrey;text-transform:bold;padding:2px 4px;');
-			$(this).val('all').trigger('change');
-		}
-	});	
-}
-
-
-///-------------------- load scrooled ------------------------
-(function($) {
-    $.fn.loadScroll = function(duration) {
-        var $window = $(window),images = this,inview,loaded;
-        images.one('loadScroll', function() {
-            if (this.getAttribute('data-src')) {
-                this.setAttribute('src',this.getAttribute('data-src'));
-                this.removeAttribute('data-src');
-                if (duration) {
-                    $(this).hide().fadeIn(duration).removeAttr('style').addClass('lazy-out');
-                    //$(this).hide().fadeIn(duration).add('img').removeAttr('style').addClass('lazy-out');
-                } else return false;
-            }
-        });
-        function lazy_load_image(){
-            inview = images.filter(function() {
-                var a = $window.scrollTop(),
-                    b = $window.height(),
-                    c = $(this).offset().top,
-                    d = $(this).height();
-                return c + d >= a && c <= a + b;
-            });            
-            loaded = inview.trigger('loadScroll');
-            images = images.not(loaded);   
-        }
-        $window.scroll(function() {
-            lazy_load_image();                  
-        });
-        $window.ready(function() {
-            lazy_load_image();           
-        })        
-    };
-    
-})(jQuery);
-
 window.addEventListener('click', function(e){
 	if ($('[show-sosmed-icon]').length>0) {
 	if (document.querySelector('[show-sosmed-icon]').contains(e.target)==true){
@@ -444,7 +154,7 @@ $(document).on('submit','[name="catalogue-form"]',function(event){
 		render_catalogue_products(sufix);
 	}
 })
-if ($('[name="catalogue-form"]')!=undefined) {
+if ($('[name="catalogue-form"]').length>0) {
 	render_catalogue();
 }
 function render_catalogue(){	
@@ -1169,7 +879,7 @@ navSlide();
 
 
 var transaksi_tmp_chart_qty = 0
-$(document).on('keyup','[transaksi-chate-qty-product-on-cart]',function(event){
+$(document).on('keyup','[transaksi-change-qty-product-on-cart]',function(event){
 	event.preventDefault();
 	var new_val = this.value,
 		id = $(this).attr('id');
@@ -1184,9 +894,10 @@ $(document).on('keyup','[transaksi-chate-qty-product-on-cart]',function(event){
 				url:link_url,
 				data:'',
 				success:function(data){
+					after_submit("transaksi-change-qty-product-on-cart",data);
 					var data = JSON.parse(data);
 					if (data.result=='1' && data.result!=undefined) {
-						this.value = data.qty;
+						$(this).val(data.qty);
 						$('[render-single-price-item-on-cart-'+id+'],[total-cart-on-transaction-'+data.id_trans+'],[total-weight-cart-on-transaction-'+data.id_trans+']').css({'opacity':'0','-webkit-animation':"die_time .3s"});
 						setTimeout(function(){						
 							$('[render-single-price-item-on-cart-'+id+']').html(convert_Rp(data.total_price));
@@ -1225,16 +936,32 @@ $(document).on('change','[variant-option-on-product]',function(){
 })
 $(document).on('input','[name="buy_product"] [name="qty"]',function(event){
 	event.preventDefault();
-	var qty_min = parseInt(document.querySelector('[product-stock-display]').innerHTML),
-		value = parseInt($(this).val());
-	$('[name="buy_product"] [type="submit"]').prop("disabled",true);
-	if (qty_min>0 && value>0 && qty_min>=value) {
-		$('[name="buy_product"] [type="submit"]').removeAttr('disabled');
-		console.log('true');
-	}else{
-		console.log('false');
-	}
+	get_real_live_limit();
 })
+$(document).on('keyup','[name="buy_product"] [name="qty"]',function(event){
+	event.preventDefault();
+	get_real_live_limit();
+})
+$(document).on('click','[name="buy_product"] [buy-qty-plus],[name="buy_product"] [buy-qty-minus]',function(event){
+	event.preventDefault();
+	get_real_live_limit();
+})
+function get_real_live_limit(){
+	var qty_min = parseInt(document.querySelector('[product-stock-display]').innerHTML),
+		value = parseInt($('[name="buy_product"] [name="qty"]').val());
+	$('[name="buy_product"] [type="submit"]').prop("disabled",true);
+	$("[responce-to-stock]").html("Beli");
+	if (qty_min>0 && value>0 && qty_min>=value) {
+		$("[responce-to-stock]").html("Beli");
+		$('[name="buy_product"] [type="submit"]').removeAttr('disabled');
+	}else{
+		if (qty_min>0) {
+			$("[responce-to-stock]").html("<span class='text-warnig text-bold'>Maks "+qty_min+"</span>");
+		}else{
+			$("[responce-to-stock]").html("Beli");			
+		}
+	}	
+}
 $(document).on('click','.p-option',function(event){
 	$('[name="buy_product"] [type="submit"]').prop("disabled",true);
 	event.preventDefault();
@@ -1261,7 +988,7 @@ $(document).on('click','.p-option',function(event){
 get_default_stock();
 function get_default_stock(){
 	$('[name="buy_product"] [type="submit"]').prop("disabled",true);
-	if ($('[name="buy_product"]')!=undefined) {
+	if ($('[name="buy_product"]').length>0) {
 		var id_option = $('[name="buy_product"]').find('.p-option.active').attr('id-option'),
 			id_variant = $('[variant-option-on-product]').val(),
 			id_product = $('[name="buy_product"] [name="id_product"]').val();
@@ -1290,7 +1017,7 @@ function render_single_cart_item(val,trans_status){
 		qty = val.qty+val.unit_cd;
 	if ((trans_status=='1' || trans_status=='2' || trans_status=='3') && trans_status!=undefined) {
 		btn = '<button type="button" class="btn btn-outline-danger btn-sm" id="DeleteData" confirm-msg="Hapus <b>'+val.product_name+'  <sup>('+val.qty+')</sup></b> dari keranjang?" name="delete_item_cart" data-href="'+crud_file+'function=delete_item_cart&id='+val.id+'"><i class="fa fa-trash"></i></button>';
-		qty = '<input type="number" style="min-width:3em;max-width:5em;padding-left: 4px;padding-right: 4px" min="1" max="10000" class="InputInt form-control form-control-sm text-center" transaksi-chate-qty-product-on-cart id="'+val.id+'" value="'+val.qty+'">';
+		qty = '<input type="number" style="min-width:3em;max-width:5em;padding-left: 4px;padding-right: 4px" min="1" max="10000" class="InputInt form-control form-control-sm text-center" transaksi-change-qty-product-on-cart id="'+val.id+'" value="'+val.qty+'">';
 	}
 	return '<tr single-item-on-cart-list-'+val.id+'><td style="width:80px"><div class="img-col" style="border:1px solid #ddd"><img src="'+val.small_file_url+'"></div></td><td class="text-uppercase"><a href="'+val.link_url+'">'+val.product_name+' '+val.option_name+' '+val.variant_name+'</a><span class="pull-right">'+btn+'</span></td><td style="width:6em">'+qty+'</td><td align="right" render-single-price-item-on-cart-'+val.id+'>'+convert_Rp(val.total_price)+'</td></tr>';
 }
@@ -1988,5 +1715,15 @@ function after_submit(form_name,data){
 		open_captcha();
 		$("[name='user_message_footer']").trigger('reset');	
 		$("[name='user_message_footer'] [name='captcha']").val('');		
+	}if (form_name=='transaksi-change-qty-product-on-cart') {
+		var data = JSON.parse(data);
+		if (data.result!=undefined) {
+			var result = data.result;
+			if (result=='6') {
+				confirm_result("Maaf stok tidak tersedia",2,3000);				
+			}else if (data.reach_limit=='1') {
+				confirm_result("Anda hanya dapat memesan "+data.max_stock,2,3000);	
+			}
+		}
 	}
-}
+}	
