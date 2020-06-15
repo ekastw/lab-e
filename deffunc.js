@@ -1091,7 +1091,7 @@ function home_cart_list(link_url,target_div){
 					table += '<tr><th colspan="3" class="text-left">Total</th><th class="text-right" total-cart-on-transaction-'+data.id+'>'+convert_Rp(data.total_cart)+'</th></tr>';
 					table += '<tr><th colspan="3" class="text-left">Berat</th><th class="text-right"><span total-weight-cart-on-transaction-'+data.id+'>'+data.total_weight+'</span> gram</th></tr>';
 					hasil += '<div class="table-responsive '+effect+'"><table class="v-middle checkout-table">'+table+'<table></di>';
-					hasil += '<p><button type="button" class="btn btn-outline-info" href="'+base_url+'keranjang?inv='+data.trans_cd+'&checkout"><i class="fa fa-paper-plane"></i> Lanjut Pengiriman & Pembayaran</button></p>';
+					hasil += '<p><button type="button" class="btn btn-outline-info" href="'+base_url+'keranjang?inv='+data.trans_cd+'&courier"><i class="fa fa-paper-plane"></i> Lanjut Pengiriman & Pembayaran</button></p>';
 				}else{
 					hasil += '<h5 align="center"><label>Tidak ada item dalam transaksi ini.</label></h5>';
 				}
@@ -1631,7 +1631,7 @@ function after_submit(form_name,data){
 	if (form_name=='check_out_transaction') {
 		var inv = $('[name="check_out_transaction"]').attr("inv-num");
 		if (data=='1' || data=='11') {
-			location.href = base_url+'keranjang?inv='+inv+'&final'
+			location.href = base_url+'keranjang?inv='+inv+'&payment'
 		}
 	}
 	if (form_name=='delete_from_cart') {
