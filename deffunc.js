@@ -1083,8 +1083,8 @@ function home_cart_list(link_url,target_div){
 		success:function(data){
 			var data = JSON.parse(data);
 			if (data.id!=undefined) {
-        var data.trans_status = parseInt(data.trans_status);
-        if (data.trans_status=='1') {
+        var trans_status = parseInt(data.trans_status);
+        if (trans_status=='1') {
   				if (data.items.length>0) {
   					var table = '<tr><th colspan="2">Item</th><th>Qty</th><th>Harga</th></tr>';
   					$.each(data.items,function(key,val){
@@ -1097,9 +1097,9 @@ function home_cart_list(link_url,target_div){
   				}else{
   					hasil += '<h5 align="center"><label>Tidak ada item dalam transaksi ini.</label></h5>';
           }          
-				}if(data.trans_status=='2') {
+				}if(trans_status=='2') {
           location.href=base_url+'keranjang?inv='+data.trans_cd+'&courier';
-        }if(data.trans_status>2{
+        }if(trans_status>2){
           location.href=base_url+'keranjang?inv='+data.trans_cd+'&finish';          
         }
 			}else{
