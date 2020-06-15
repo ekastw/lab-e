@@ -1082,19 +1082,25 @@ function home_cart_list(link_url,target_div){
 		data:'',
 		success:function(data){
 			var data = JSON.parse(data);
-			if (data.id!=undefined && data.trans_status=='1') {
-				if (data.items.length>0) {
-					var table = '<tr><th colspan="2">Item</th><th>Qty</th><th>Harga</th></tr>';
-					$.each(data.items,function(key,val){
-						table += '<span render-single-cart-item-'+val.id+'>'+render_single_cart_item(val,data.trans_status)+'</span>';
-					})
-					table += '<tr><th colspan="3" class="text-left">Total</th><th class="text-right" total-cart-on-transaction-'+data.id+'>'+convert_Rp(data.total_cart)+'</th></tr>';
-					table += '<tr><th colspan="3" class="text-left">Berat</th><th class="text-right"><span total-weight-cart-on-transaction-'+data.id+'>'+data.total_weight+'</span> gram</th></tr>';
-					hasil += '<div class="table-responsive '+effect+'"><table class="v-middle checkout-table">'+table+'<table></di>';
-					hasil += '<p><button type="button" class="btn btn-outline-info" href="'+base_url+'keranjang?inv='+data.trans_cd+'&courier"><i class="fa fa-paper-plane"></i> Lanjut Pengiriman & Pembayaran</button></p>';
-				}else{
-					hasil += '<h5 align="center"><label>Tidak ada item dalam transaksi ini.</label></h5>';
-				}
+			if (data.id!=undefined) {
+        if (data.trans_status=='1') {
+  				if (data.items.length>0) {
+  					var table = '<tr><th colspan="2">Item</th><th>Qty</th><th>Harga</th></tr>';
+  					$.each(data.items,function(key,val){
+  						table += '<span render-single-cart-item-'+val.id+'>'+render_single_cart_item(val,data.trans_status)+'</span>';
+  					})
+  					table += '<tr><th colspan="3" class="text-left">Total</th><th class="text-right" total-cart-on-transaction-'+data.id+'>'+convert_Rp(data.total_cart)+'</th></tr>';
+  					table += '<tr><th colspan="3" class="text-left">Berat</th><th class="text-right"><span total-weight-cart-on-transaction-'+data.id+'>'+data.total_weight+'</span> gram</th></tr>';
+  					hasil += '<div class="table-responsive '+effect+'"><table class="v-middle checkout-table">'+table+'<table></di>';
+  					hasil += '<p><button type="button" class="btn btn-outline-info" href="'+base_url+'keranjang?inv='+data.trans_cd+'&courier"><i class="fa fa-paper-plane"></i> Lanjut Pengiriman & Pembayaran</button></p>';
+  				}else{
+  					hasil += '<h5 align="center"><label>Tidak ada item dalam transaksi ini.</label></h5>';
+          }          
+				}if (data.trans_status=='2') {
+          location.href=base_url+'keranjang?inv='+data.trans_cd+'&courier';
+        }else{
+          location.href=base_url+'keranjang?inv='+data.trans_cd+'&finish';          
+        }
 			}else{
 				hasil = '<h4 align="center"><label>Maaf transaksi yang anda cari tidak ada di database kami.</label></h4>';
 			}
