@@ -1728,4 +1728,10 @@ function after_submit(form_name,data){
 			}
 		}
 	}
+  if (form_name=="payment_check_out") {
+    var inv = $('[name="check_out_transaction"]').attr("inv-num");
+    if (data=='1' || data=='11') {
+      location.href = base_url+'keranjang?inv='+inv+'&finish'
+    }
+  }
 }	
