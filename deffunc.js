@@ -1155,13 +1155,15 @@ function render_single_cart_item_tipe_2(val,trans_status){
 if ($('[load-cart-list]').length>0) {
 	home_cart_list($('[load-cart-list]').attr("data-href"),$('[load-cart-list]'));
 }if (typeof AppClassName=='undefined') {
-	if ($('.province_option').length>0) {
-		province_option();
-	}if ($('.city_option').length>0) {
-		city_option();
-	}if ($('.courier_option').length>0) {
-		courier_option();
-	}
+  /*
+  if ($('.province_option').length>0) {
+    province_option();
+  }if ($('.city_option').length>0) {
+    city_option();
+  }if ($('.courier_option').length>0) {
+    courier_option();
+  }
+  */
 }if ($('[check-out-courier-cart-detail]').length>0) {
 	check_out_courier_cart_detail($('[check-out-courier-cart-detail]').attr("data-href"),$('[check-out-courier-cart-detail]'));	
 }if ($('.categories_option').length>0) {
@@ -1267,7 +1269,30 @@ function check_out_courier_cart_detail(link_url,target_div){
 	});
 }
 
+if ($("[cart-courier-active-address]").length>0) {
+  var province_id_val = parseInt($('[cart-courier-active-address] [name="province_id"]').attr("active-value")),
+      city_id_val = parseInt($('[cart-courier-active-address] [name="city_id"]').attr("active-value")),
+      subdistrict_id_val = parseInt($('[cart-courier-active-address] [name="subdistrict_id"]').attr("active-value"));
 
+  if (province_id_val>0){   
+    province_option(null,'[cart-courier-active-address] [name="province_id"]',province_id_val);
+  }else{
+    province_option();
+  };
+
+  if (city_id_val>0){
+    city_option(province_id_val,null,'[cart-courier-active-address] [name="city_id"]',city_id_val);
+  }else{
+    city_option();
+  };
+
+  if (subdistrict_id_val>0){
+    subdistrict_option(city_id_val,'[cart-courier-active-address] [name="subdistrict_id"]',subdistrict_id_val);  
+  }else{
+    subdistrict_option();
+  };
+
+}
 
 
 
