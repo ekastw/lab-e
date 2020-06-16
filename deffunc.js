@@ -693,6 +693,7 @@ function render_cart_data(){
 							hasil += '<tr><td align="right" colspan="2">Total</td><td align="right" detail-tmp-cart-top-grand-price>'+convert_Rp(Math.ceil(grand_price))+'</td></tr></table></div><a href="'+base_url+'keranjang?inv='+data[i].trans_cd+'" class="btn btn-outline-success btn-sm">Check Out</a></div>';
 						}
 					}
+          hasil += "<button type='button' class='btn btn-success pull-right' data-dismiss='modal'>produk lain</button>";
 				}else{
           top_cart_status = '';
 					hasil = '<h5 align="center" style="margin-top:10px"><label>Tidak Ada Item Dalam Keranjang</label></h5><p align="center"><a href="'+base_url+'user/transaksi/">Lihat Riwayat Transaksi</a></p>';
