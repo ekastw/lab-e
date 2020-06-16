@@ -74,7 +74,7 @@ body {
 		.col-lg-20{width: 20%!important;}
 		.checkout-table{width: 100%;margin-bottom: 20px}
 		.checkout-table tr th{text-align: center}
-		.checkout-table tr th,.checkout-table tr td{padding: 8px;border: 1px solid #ddd}
+		.checkout-table tr th,.checkout-table tr td{padding: 8px;border: 1px solid rgb(240,240,240);border-left: none;border-right: none;}
 		.checkout-table tr td:first-child{border-right: none;}
 		.checkout-table tr td:nth-child(2){border-left : none;}
 		.checkout-table tr{border-bottom: 1px solid WhiteSmoke}
@@ -329,7 +329,6 @@ body {
 			.modal-open .navbar-menu{float: left;height: auto;}
 			.nav-links{
 				overflow-y: auto!important;
-				float: left;
 				z-index:1;
 				position:absolute;
 				right:0;
@@ -344,7 +343,7 @@ body {
 			}
 			.nav-links li{background: White;opacity:0;width: 100vw;text-align: left;border-bottom: 1px solid #ddd;float: left;left: 0px}
 		}
-		.nav-active{transform:translateX(0%)}
+		.nav-active{transform:translateX(0%);width: 100%;background: white!important}
 		@keyframes navLinkFadeOut {
 			from{opacity:0;transform:translateX(-50px)}
 			to{opacity:1;transform:translateX(0px)}
