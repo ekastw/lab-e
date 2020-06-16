@@ -1289,12 +1289,24 @@ if ($("[cart-courier-active-address]").length>0) {
   }else{
     subdistrict_option();
   };
-  
-  if ($('.courier_option').length>0) {
-    courier_option();
-  }
-
 }
+if ($('.courier_option').length>0) {
+  courier_option();
+}
+
+
+$(document).on('change','[cart-courier-active-address] [name="province_id"]',function(){
+  $('[cart-courier-active-address] [name="city_id"]').html("")
+  $('[cart-courier-active-address] [name="subdistrict_id"]').html("")
+  $('[cart-courier-active-address] .courier_option').val("").change();
+})
+$(document).on('change','[cart-courier-active-address] [name="city_id"]',function(){
+  $('[cart-courier-active-address] [name="subdistrict_id"]').html("")
+  $('[cart-courier-active-address] .courier_option').val("").change();
+})
+$(document).on('change','[cart-courier-active-address] [name="subdistrict_id"]',function(){
+  $('[cart-courier-active-address] .courier_option').val("").change();
+})
 
 
 
