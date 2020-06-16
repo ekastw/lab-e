@@ -1160,8 +1160,6 @@ if ($('[load-cart-list]').length>0) {
     province_option();
   }if ($('.city_option').length>0) {
     city_option();
-  }if ($('.courier_option').length>0) {
-    courier_option();
   }
   */
 }if ($('[check-out-courier-cart-detail]').length>0) {
@@ -1291,6 +1289,10 @@ if ($("[cart-courier-active-address]").length>0) {
   }else{
     subdistrict_option();
   };
+  
+  if ($('.courier_option').length>0) {
+    courier_option();
+  }
 
 }
 
