@@ -1,4 +1,6 @@
-.bank{background: url('bank-vector.jpg') no-repeat;padding-top: 55%;width: 100%;background-size: 400%}
+.bank{background: url('https://cdn.statically.io/img/zahranaindah.com/assets/plugins/bank-logo/bank-vector.jpg?f=auto') no-repeat;padding-top: 55%;width: 100%;background-size: 400%;display: none;}
+
+.bank-bi,.bank-ojk,.bank-bri,.bank-mandiri,.bank-windu,.bank-bni,.bank-bca,.bank-bjb,.bank-cimb,.bank-may,.bank-hsbc,.bank-mandiri-syariah,.bank-btn,.bank-panin,.bank-btn-syariah,.bank-bni-syariah,.bank-bukopin,.bank-riau-kepri,.bank-ocbc-nisp,.bank-qnb,.bank-mnc,.bank-index,.bank-icbc,.bank-common-wealth,.bank-uob,.bank-bri-syariah,.bank-mestika,.bank-nobu,.bank-sinarmas,.bank-artha-graha,.bank-j-trust,.bank-ekonomi,.bank-robo,.bank-permata,.bank-mega,.bank-danamon{display: block!important}
 
 .bank.with-border{border: 1px solid #ddd;border-radius: 14px}
 .bank-bi{background-position: 0% 0%}
@@ -45,6 +47,3 @@
 .bank-permata{background-position: 33.5% 100%}
 .bank-mega{background-position: 67% 100%}
 .bank-danamon{background-position: 100% 100%}
-
-
-.bank-bi,.bank-ojk,.bank-bri,.bank-mandiri,.bank-windu,.bank-bni,.bank-bca,.bank-bjb,.bank-cimb,.bank-may,.bank-hsbc,.bank-mandiri-syariah,.bank-btn,.bank-panin,.bank-btn-syariah,.bank-bni-syariah,.bank-bukopin,.bank-riau-kepri,.bank-ocbc-nisp,.bank-qnb,.bank-mnc,.bank-index,.bank-icbc,.bank-common-wealth,.bank-uob,.bank-bri-syariah,.bank-mestika,.bank-nobu,.bank-sinarmas,.bank-artha-graha,.bank-j-trust,.bank-ekonomi,.bank-robo,.bank-permata,.bank-mega,.bank-danamon{display: block!important}
