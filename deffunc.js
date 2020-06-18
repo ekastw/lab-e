@@ -567,7 +567,7 @@ $(document).on('click','.owl-carousel .item',function(event){
 	}
 })
 if ($('.owl-carousel').length>0 || $('.responsive-owl-carousel').length>0) {
-	open_script(base_url+'assets/dist/js/owl.carousel.min.js',1);
+	open_script('https://cdn.statically.io/gh/ekastw/lab-e/89b0f2a4/owl.carousel.min.js',1);
 }
 function open_script(file_url,do_after){
 	$.getScript( file_url ).done(
