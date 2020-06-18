@@ -646,17 +646,24 @@ function owlcar(){
 }
 
 
-$(document).on('click','[all-product-images] [data-src]',function(event){
+$(document).on('click','[all-product-images] [real-src]',function(event){
 	event.preventDefault();
-	if ($('[main-product-image]').length==1) {
-		if ($('[main-product-image]').attr('src')!=$(this).attr('data-src')) {
-			$('[main-product-image]').attr('src',$(this).attr('src'));
-			$('[main-product-image]').attr('data-src',$(this).attr('data-src'));
-			setTimeout(function(){
-				$('[main-product-image]').loadScroll();
-			},500)		
+	var target = $('[main-product-image]'),
+		real_pic = $(this).attr('real-src'),
+		small_file_url = $(this).attr('src');
+	target.addClass('lazy-in');
+	setTimeout(function(){
+		target.removeClass('lazy-in');
+		if (target.length==1) {
+			if (target.attr('src')!=real_pic) {
+				target.attr('src',small_file_url);
+				target.attr('data-src',real_pic);
+				setTimeout(function(){
+					target.loadScroll();
+				},500)		
+			}
 		}
-	}
+	},300)
 })
 $('body').append('<div class="modal fade-in" id="peek-the-image"><div class="modal-dialog modal-lg"><div class="modal-content"><div class="modal-body" style="padding:4px"><button type="button" class="close" data-dismiss="modal" aria-label="Close" style="position:absolute;top:0px;right:6px;color:Tomato"><span aria-hidden="true">×</span></button><div view-image></div></div></div></div></div>')
 $(document).on('click','[main-product-image]',function(event){
@@ -855,7 +862,7 @@ $(document).on('submit','[search-box]',function(event){
 	}
 })
 
-$(document).ready(function(){
+window.addEventListener('load', function () {
   $('.lazy-load').loadScroll(1000);
 })
 
@@ -1993,3 +2000,11 @@ function after_submit(form_name,data){
     }
   }
 }	
+
+/*
+
+html2canvas(document.querySelector("#html-capture")).then(canvas => {
+    document.body.appendChild(canvas)
+});
+
+*/
