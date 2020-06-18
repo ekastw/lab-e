@@ -716,7 +716,7 @@ function render_cart_data(){
 			var data = JSON.parse(data),
 				hasil = "<button type='button' class='close' data-dismiss='modal'>&times;</button>";
 			if (data.login==false) {
-        top_cart_status = false;
+		        top_cart_status = 'please-login';
 				hasil = '<p align="center"><label>Silahkan login terlebih dahulu untuk dapat berbelanja, klik tombol dibawah ini untuk login</label><br><a data-toggle="modal" data-target="#modal-user-reg" href>daftar</a> atau <a data-toggle="modal" data-target="#modal-user-log" href>login</a></p>';
 				$('#modal-cart-list').modal('hide');
 				$('#modal-user-log').modal('show');
@@ -725,28 +725,32 @@ function render_cart_data(){
 					for (var i = 0; i < data.length; i++) {
 						var product_list = data[i]['product_list']
 							no = 1;
-            top_cart_status += data[i]['trans_cd'];
+			            top_cart_status += data[i]['trans_cd'];
 						if (product_list.length>0) {
 							hasil += '<div detail-tmp-cart-top-'+data[i]['id']+'><h5><i class="fa fa-cart-plus"></i> Detail Pesanan</h5><h5><small><label>No. Inv : '+data[i]['trans_cd']+'</label> <label style="float:right">'+data[i].create_date+'</label></small></h5><div class="table-responsive"><table class="table table-striped table-bordered tmp-top-cart-table">';
 							hasil += '<tr><th>Nama Item</th><th>Qty</th><th>Harga</th></tr>'
 							grand_price = 0;
 							$.each(product_list,function(key,val){
-                top_cart_status += val.id+''+val.qty;
-                hasil += '<tbody cart-detail-top-'+val.id+'>'+cart_detail_top(val)+'</tbody>';
-              })
+								items += parseInt(val.qty);
+								top_cart_status += val.id+''+val.qty;
+								hasil += '<tbody cart-detail-top-'+val.id+'>'+cart_detail_top(val)+'</tbody>';
+							})
 							hasil += '<tr><td align="right" colspan="2">Total</td><td align="right" detail-tmp-cart-top-grand-price>'+convert_Rp(Math.ceil(grand_price))+'</td></tr></table></div><a href="'+base_url+'keranjang?inv='+data[i].trans_cd+'" class="btn btn-outline-success btn-sm">Check Out</a><button type="button" class="btn btn-success pull-right" data-dismiss="modal">produk lain</button></div>';
 						}
 					}
 				}else{
-          top_cart_status = '';
+					top_cart_status = 'no-item';
 					hasil = '<h5 align="center" style="margin-top:10px"><label>Tidak Ada Item Dalam Keranjang</label></h5><p align="center"><a href="'+base_url+'user/transaksi/">Lihat Riwayat Transaksi</a></p>';
 				}
 			};
-      console.log(top_cart_status);
-      if (check_temporary_cart!=top_cart_status) {
-        check_temporary_cart = top_cart_status;
-  			target_div.html('<div class="fade-in-effect">'+hasil+'</div>');
-      }
+			if (items>0) {
+				$('[header-count-cart-item], [count-cart-item]').html('<b>'+items+'</b>');
+			}if (items==0) {
+				$('[header-count-cart-item], [count-cart-item]').html('');			
+			}if (check_temporary_cart!=top_cart_status) {
+				check_temporary_cart = top_cart_status;
+				target_div.html('<div class="fade-in-effect">'+hasil+'</div>');
+			}
 		},error : function(data){
 			console.log(data.responseText);
 		}
