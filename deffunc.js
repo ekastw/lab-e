@@ -122,6 +122,15 @@ function confirm_result(msg,bg_color,interval_data){
 
 
 
+$(document).on('click','[use-balance-for-payment]',function(){
+	var target = $('[payment-with-or-without-balance]'),
+		balance = target.attr('payment-without-balance');
+	if ($(this).prop("checked")) {
+		balance = target.attr('payment-with-balance');
+	}
+	target.html(balance);
+})
+
 
 $(document).on('click','[toggle-coloumn]',function(event){
   event.preventDefault();
