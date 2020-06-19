@@ -264,6 +264,24 @@ function formatNumber(n) {
   return n.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ".")
 }
 
+$(document).on('submit','[name="check_out_transaction"]',function(event){
+	event.preventDefault();
+	var f_check = $('[name="check_out_transaction"] [name="service_id"]');
+	if (f_check.length>0 && parseInt(f_check.val())>=0) {
+		$.ajax({
+			type:"POST",
+			url:$(this).attr('action'),
+			data:$(this).serialize(),
+			success:function(data){
+				after_submit("check_out_transaction",data);
+			}
+		})
+	}else{
+		$('[name="courier_id"]').focus().select2('open');
+		confirm_result("Pilih Ekspedisi",2,1000);
+	}
+})
+
 
 $(document).on('change','[name="check_out_transaction"] .courier_option',function(event){
 	event.preventDefault();
@@ -729,7 +747,7 @@ function render_cart_data(){
 							no = 1;
 			            top_cart_status += data[i]['trans_cd'];
 						if (product_list.length>0) {
-							hasil += '<div detail-tmp-cart-top-'+data[i]['id']+'><h5><i class="fa fa-cart-plus"></i> Detail Pesanan</h5><h5><small><label>No. Inv : '+data[i]['trans_cd']+'</label> <label style="float:right">'+data[i].create_date+'</label></small></h5><div class="table-responsive"><table class="table table-striped table-bordered tmp-top-cart-table">';
+							hasil += '<div detail-tmp-cart-top-'+data[i]['id']+'><h5><i class="fa fa-cart-plus"></i> Detail Pesanan</h5><h5><small><label style="float:right">'+data[i].create_date+'</label></small></h5><div class="table-responsive"><table class="table table-striped table-bordered tmp-top-cart-table">';
 							hasil += '<tr><th>Nama Item</th><th>Qty</th><th>Harga</th></tr>'
 							grand_price = 0;
 							$.each(product_list,function(key,val){
