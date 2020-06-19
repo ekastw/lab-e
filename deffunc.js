@@ -267,7 +267,7 @@ function formatNumber(n) {
 $(document).on('submit','[name="check_out_transaction"]',function(event){
 	event.preventDefault();
 	var f_check = $('[name="check_out_transaction"] [name="service_id"]');
-	if (f_check.length>0 && parseInt(f_check.val())>=0) {
+	if (f_check.length>0 && f_check.val()!=undefined && parseInt(f_check.val())>=0) {
 		$.ajax({
 			type:"POST",
 			url:$(this).attr('action'),
@@ -317,7 +317,7 @@ $(document).on('change','[name="check_out_transaction"] .courier_option',functio
 							service.push('<option value="'+num+'">'+num+'</option>');
 							hasil += '<div class="col-lg-12 '+active+'" style="margin-bottom:4px" courier-selection tmp-num="'+num+'" value="'+val.cost[0].value+'"><div class="card"><div class="card-body"><table class="v-middle" style="width:100%"><tr><td>'+val.service+'<hr class="no-margin">'+val.description+'</td><td align="right"><h4 class="no-margin no-padding"><b>'+convert_Rp(val.cost[0].value)+'</b></h4></td></tr></table></div></div></div>';
 						})
-						service_selection = '<select name="service_id" style="display:none" class="form-control">'+service.join('')+'</select>';
+						service_selection = '<select name="service_id" class="form-control dis-0">'+service.join('')+'</select>';
 						hasil += '</div>';
 					}else{
 						hasil += '<h4 class="text-info text-center">'+val.code+' - '+val.name+'</h4><h5 class="col-abs-cc-then-normal text-center" style="opacity: .6"><label>Ongkir Tidak Tersedia</label></h5>';
@@ -1276,25 +1276,23 @@ function home_cart_list(link_url,target_div){
 		success:function(data){
 			var data = JSON.parse(data);
 			if (data.id!=undefined) {
-        var trans_status = parseInt(data.trans_status);
-        if (trans_status=='1') {
-  				if (data.items.length>0) {
-  					var table = '<tr><th colspan="2">Item</th><th>Qty</th><th>Harga</th></tr>';
-  					$.each(data.items,function(key,val){
-  						table += '<span render-single-cart-item-'+val.id+'>'+render_single_cart_item(val,data.trans_status)+'</span>';
-  					})
-  					table += '<tr><th colspan="3" class="text-left">Total</th><th class="text-right" total-cart-on-transaction-'+data.id+'>'+convert_Rp(data.total_cart)+'</th></tr>';
-  					table += '<tr><th colspan="3" class="text-left">Berat</th><th class="text-right"><span total-weight-cart-on-transaction-'+data.id+'>'+data.total_weight+'</span> gram</th></tr>';
-  					hasil += '<div class="table-responsive '+effect+'"><table class="v-middle checkout-table">'+table+'<table></di>';
-  					hasil += '<p><button type="button" class="btn btn-outline-info" href="'+base_url+'keranjang?inv='+data.trans_cd+'&courier"><i class="fa fa-paper-plane"></i> Lanjut Pengiriman & Pembayaran</button></p>';
-  				}else{
-  					hasil += '<h5 align="center"><label>Tidak ada item dalam transaksi ini.</label></h5>';
-          }          
-				}if(trans_status=='2') {
-          location.href=base_url+'keranjang?inv='+data.trans_cd+'&courier';
-        }if(trans_status>2){
-          location.href=base_url+'keranjang?inv='+data.trans_cd+'&finish';          
-        }
+				var trans_status = parseInt(data.trans_status);
+				if (trans_status<=2) {
+	  				if (data.items.length>0) {
+	  					var table = '<tr><th colspan="2">Item</th><th>Qty</th><th>Harga</th></tr>';
+	  					$.each(data.items,function(key,val){
+	  						table += '<span render-single-cart-item-'+val.id+'>'+render_single_cart_item(val,data.trans_status)+'</span>';
+	  					})
+	  					table += '<tr><th colspan="3" class="text-left">Total</th><th class="text-right" total-cart-on-transaction-'+data.id+'>'+convert_Rp(data.total_cart)+'</th></tr>';
+	  					table += '<tr><th colspan="3" class="text-left">Berat</th><th class="text-right"><span total-weight-cart-on-transaction-'+data.id+'>'+data.total_weight+'</span> gram</th></tr>';
+	  					hasil += '<div class="table-responsive '+effect+'"><table class="v-middle checkout-table">'+table+'<table></di>';
+	  					hasil += '<p><button type="button" class="btn btn-outline-info" href="'+base_url+'keranjang?inv='+data.trans_cd+'&courier"><i class="fa fa-paper-plane"></i> Lanjut Pengiriman & Pembayaran</button></p>';
+	  				}else{
+	  					hasil += '<h5 align="center"><label>Tidak ada item dalam transaksi ini.</label></h5>';
+					}          
+				}if(trans_status>2){
+					location.href=base_url+'keranjang?inv='+data.trans_cd+'&finish';          
+				}
 			}else{
 				hasil = '<h4 align="center"><label>Maaf transaksi yang anda cari tidak ada di database kami.</label></h4>';
 			}
@@ -2024,3 +2022,11 @@ function after_submit(form_name,data){
     }
   }
 }	
+
+/*
+
+html2canvas(document.querySelector("#html-capture")).then(canvas => {
+    document.body.appendChild(canvas)
+});
+
+*/
