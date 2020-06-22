@@ -10,7 +10,7 @@
                 this.setAttribute('src',this.getAttribute('data-src'));
                 this.removeAttribute('data-src');
                 if (duration) {
-                    $(this).hide().fadeIn(duration).removeAttr('style').addClass('lazy-out').css({'display':"block"});
+                    $(this).hide().fadeIn(duration).removeAttr('style').addClass('lazy-out');
                     //$(this).hide().fadeIn(duration).add('img').removeAttr('style').addClass('lazy-out');
                 } else return false;
             }
@@ -24,7 +24,7 @@
                 return c + d >= a && c <= a + b;
             });            
             loaded = inview.trigger('loadScroll');
-            images = images.not(loaded).css({'display':"block"});   
+            images = images.not(loaded);   
         }
         $window.scroll(function() {
             lazy_load_image();                  
