@@ -896,7 +896,7 @@ $(document).on('submit','[search-box]',function(event){
 	}
 })
 
-window.load = function () {
+window.onload  = function () {
 	if ($('.onload-mask').length>0) {
 		$('.onload-mask').fadeOut(800)
 		$('.lazy-load').loadScroll(1000);
