@@ -23,8 +23,8 @@
                     d = $(this).height();
                 return c + d >= a && c <= a + b;
             });            
-            loaded = inview.trigger('loadScroll');
-            images = images.not(loaded);   
+            loaded = inview.trigger('loadScroll').css({'display':"block"});
+            images = images.not(loaded).css({'display':"block"});   
         }
         $window.scroll(function() {
             lazy_load_image();                  
