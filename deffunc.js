@@ -7,11 +7,10 @@
         var $window = $(window),images = this,inview,loaded;
         images.one('loadScroll', function() {
             if (this.getAttribute('data-src')) {
-                this.css({'display':'block'});
                 this.setAttribute('src',this.getAttribute('data-src'));
                 this.removeAttribute('data-src');
                 if (duration) {
-                    $(this).hide().fadeIn(duration).removeAttr('style').addClass('lazy-out');
+                    $(this).hide().fadeIn(duration).removeAttr('style').addClass('lazy-out').css({'display':"block"});
                     //$(this).hide().fadeIn(duration).add('img').removeAttr('style').addClass('lazy-out');
                 } else return false;
             }
