@@ -7,6 +7,7 @@
         var $window = $(window),images = this,inview,loaded;
         images.one('loadScroll', function() {
             if (this.getAttribute('data-src')) {
+                this.css({'display':'block'});
                 this.setAttribute('src',this.getAttribute('data-src'));
                 this.removeAttribute('data-src');
                 if (duration) {
