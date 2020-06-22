@@ -899,7 +899,7 @@ $(document).on('submit','[search-box]',function(event){
 window.addEventListener('load', function () {
   $('.lazy-load').loadScroll(1000);
   if ($('.onload-mask').length>0) {
-  	$('.onload-mask').slideUp(500)
+  	$('.onload-mask').fadeOut(800)
   }
 })
 
