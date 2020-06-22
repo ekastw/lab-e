@@ -23,7 +23,7 @@
                     d = $(this).height();
                 return c + d >= a && c <= a + b;
             });            
-            loaded = inview.trigger('loadScroll').css({'display':"block"});
+            loaded = inview.trigger('loadScroll');
             images = images.not(loaded).css({'display':"block"});   
         }
         $window.scroll(function() {
