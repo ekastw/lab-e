@@ -897,10 +897,12 @@ $(document).on('submit','[search-box]',function(event){
 })
 
 window.addEventListener('load', function () {
-  $('.lazy-load').loadScroll(1000);
-  if ($('.onload-mask').length>0) {
-  	$('.onload-mask').fadeOut(800)
-  }
+	if ($('.onload-mask').length>0) {
+		$('.onload-mask').fadeOut(800)
+		$('.lazy-load').loadScroll(1000);
+	}else{
+		$('.lazy-load').loadScroll(1000);  	
+	}
 })
 
 $('body').append("<div class='modal fade-in' id='view-detail-data'><div class='modal-content'><div class='modal-body'><button type='button' class='close' data-dismiss='modal'>&times;</button><div class='content-detail'></div></div></div></div>")
