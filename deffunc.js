@@ -310,7 +310,6 @@ $(document).on('change','[name="check_out_transaction"] .courier_option',functio
 function load_courier_services(link_url){
 	var target_div = $('[load-courier-on-checkout]');
 	target_div.html('<h5 class="col-abs-cc-then-normal text-center" style="opacity: .6"><label>Loading ...</label></h5>');
-	alert(link_url)
 	$.ajax({
 		type:"GET",
 		url:link_url,
