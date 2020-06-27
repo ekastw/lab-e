@@ -192,7 +192,7 @@ $(document).on('click',"[name='buy_product'] [name='id_variant']",function(event
 	$('.ul-variant li.active').removeClass('active');
 	$('.ul-variant li[value='+this.value+']').addClass('active');
 })
-if ($('#render-catalogue-products').length>0) {
+if ($('#render-catalogue-products').length>0 || $('[name="catalogue-form"]').length>0) {
 	render_catalogue_products();
 }
 $(document).on('submit','[name="catalogue-form"]',function(event){
@@ -218,9 +218,6 @@ $(document).on('submit','[name="catalogue-form"]',function(event){
 		render_catalogue_products(sufix);
 	}
 })
-if ($('[name="catalogue-form"]').length>0) {
-	render_catalogue();
-}
 function render_catalogue(){	
 	var	thisis = $('[name="catalogue-form"]'),
 		s = $('[name="catalogue-form"] [name="s"]').attr('val'),
@@ -295,54 +292,66 @@ $(document).on('submit','[name="check_out_transaction"]',function(event){
 
 $(document).on('change','[name="check_out_transaction"] .courier_option',function(event){
 	event.preventDefault();
-	var destination = $('[name="check_out_transaction"] [name="subdistrict_id"]').val(),
-		id_trans = $('[name="check_out_transaction"] [name="id_trans"]').val(),
+	var id_trans = $('[name="check_out_transaction"] [name="id_trans"]').val(),
 		courier_id = $('[name="check_out_transaction"] [name="courier_id"]').val(),
-		link_url = base_url+'json_data/cost?destination='+destination+'&destinationType=subdistrict&id_trans='+id_trans+'&courier_id='+courier_id,
+		city_id = $('[name="check_out_transaction"] [name="city_id"]').val(),
+		subdistrict_id = $('[name="check_out_transaction"] [name="subdistrict_id"]').val(),
+		link_url = base_url+'json_data/cost?destination='+city_id+'&destinationType=city&id_trans='+id_trans+'&courier_id='+courier_id,
 		target_div = $('[load-courier-on-checkout]');
-		target_div.html('<h5 class="col-abs-cc-then-normal text-center" style="opacity: .6"><label>Loading Data...</label></h5>');
-  $.ajax({
-    type:"GET",
-    url:link_url,
-    data:'',
-    success:function(data){
-    	var data = JSON.parse(data),
-    		hasil = service_selection = '';
-    	if (data.rajaongkir.status.code!=undefined && data.rajaongkir.status.code=='200') {
-    		if (data.rajaongkir.results.length>0) {
-    			service_selection = '';
-				$.each(data.rajaongkir.results,function(key,val){
-					if (val.costs.length>0) {
-						hasil += '<div class="col-lg-12 text-info"><h4 align="center">'+val.code+' - '+val.name+'</h4></div>';
-						hasil += '<div class="row">';
-						var service = [];
-						var tmp_num = 0;
-						$.each(val.costs,function(key,val){
-							var num = tmp_num++,
-								active;
-							if (num==0) {
-								active = 'active';
-								$('[courier-value-cart-check-out]').html(convert_Rp(val.cost[0].value));
-							}
-							service.push('<option value="'+num+'">'+num+'</option>');
-							hasil += '<div class="col-lg-12 '+active+'" style="margin-bottom:4px" courier-selection tmp-num="'+num+'" value="'+val.cost[0].value+'"><div class="card"><div class="card-body"><table class="v-middle" style="width:100%"><tr><td>'+val.service+'<hr class="no-margin">'+val.description+'</td><td align="right"><h4 class="no-margin no-padding"><b>'+convert_Rp(val.cost[0].value)+'</b></h4></td></tr></table></div></div></div>';
-						})
-						service_selection = '<select name="service_id" class="form-control dis-0">'+service.join('')+'</select>';
-						hasil += '</div>';
-					}else{
-						hasil += '<h4 class="text-info text-center">'+val.code+' - '+val.name+'</h4><h5 class="col-abs-cc-then-normal text-center" style="opacity: .6"><label>Ongkir Tidak Tersedia</label></h5>';
-					}
-				})
-				hasil = '<div class="row" style="margin-top:20px">'+hasil+'</div>';
-    		}
-    		target_div.html(hasil+' '+service_selection)
-    		sum_check_out_cost();
-    	}
-    },error:function(data){
-      console.log(data.responseText);
-    }
-  })  
+
+		if (parseInt(subdistrict_id)>0) {
+			link_url = base_url+'json_data/cost?destination='+subdistrict_id+'&destinationType=subdistrict&id_trans='+id_trans+'&courier_id='+courier_id;			
+		}if (parseInt(courier_id)>0 || parseInt(courier_id)=='') {
+			load_courier_services(link_url);
+		}else{
+			target_div.html('<h5 class="col-abs-cc-then-normal text-center" style="opacity: .6"><label>Pilih Kurir</label></h5>');			
+		}
 })
+function load_courier_services(link_url){
+	var target_div = $('[load-courier-on-checkout]');
+	target_div.html('<h5 class="col-abs-cc-then-normal text-center" style="opacity: .6"><label>Loading ...</label></h5>');
+	$.ajax({
+		type:"GET",
+		url:link_url,
+		data:'',
+		success:function(data){
+	    	var data = JSON.parse(data),
+	    		hasil = service_selection = '';
+	    	if (data.rajaongkir.status.code!=undefined && data.rajaongkir.status.code=='200') {
+	    		if (data.rajaongkir.results.length>0) {
+	    			service_selection = '';
+					$.each(data.rajaongkir.results,function(key,val){
+						if (val.costs.length>0) {
+							hasil += '<div class="col-lg-12 text-info"><h4 align="center">'+val.code+' - '+val.name+'</h4></div>';
+							hasil += '<div class="row">';
+							var service = [];
+							var tmp_num = 0;
+							$.each(val.costs,function(key,val){
+								var num = tmp_num++,
+									active;
+								if (num==0) {
+									active = 'active';
+									$('[courier-value-cart-check-out]').html(convert_Rp(val.cost[0].value));
+								}
+								service.push('<option value="'+num+'">'+num+'</option>');
+								hasil += '<div class="col-lg-12 '+active+'" style="margin-bottom:4px" courier-selection tmp-num="'+num+'" value="'+val.cost[0].value+'"><div class="card"><div class="card-body"><table class="v-middle" style="width:100%"><tr><td>'+val.service+'<hr class="no-margin">'+val.description+'</td><td align="right"><h4 class="no-margin no-padding"><b>'+convert_Rp(val.cost[0].value)+'</b></h4></td></tr></table></div></div></div>';
+							})
+							service_selection = '<select name="service_id" class="form-control dis-0">'+service.join('')+'</select>';
+							hasil += '</div>';
+						}else{
+							hasil += '<h4 class="text-info text-center">'+val.code+' - '+val.name+'</h4><h5 class="col-abs-cc-then-normal text-center" style="opacity: .6"><label>Ongkir Tidak Tersedia</label></h5>';
+						}
+					})
+					hasil = '<div class="row" style="margin-top:20px">'+hasil+'</div>';
+	    		}
+	    		target_div.html(hasil+' '+service_selection)
+	    		sum_check_out_cost();
+	    	}
+		},error:function(data){
+			console.log(data.responseText);
+		}
+	})  
+}
 $(document).on('click','[courier-selection]',function(event){
 	event.preventDefault();
 	var value = convert_Rp($(this).attr('value')),
@@ -1352,7 +1361,7 @@ if ($("[cart-courier-active-address]").length>0) {
   var province_id_val = parseInt($('[cart-courier-active-address] [name="province_id"]').attr("active-value")),
       city_id_val = parseInt($('[cart-courier-active-address] [name="city_id"]').attr("active-value")),
       subdistrict_id_val = parseInt($('[cart-courier-active-address] [name="subdistrict_id"]').attr("active-value"));
-
+      courier_id_val = parseInt($('[cart-courier-active-address] [name="courier_id"]').attr("active-value"));
   if (province_id_val>0){   
     province_option(null,'[cart-courier-active-address] [name="province_id"]',province_id_val);
   }else{
@@ -1370,8 +1379,20 @@ if ($("[cart-courier-active-address]").length>0) {
   }else{
     subdistrict_option();
   };
+
+  if (courier_id_val>0){
+    courier_option('[cart-courier-active-address] [name="courier_id"]',courier_id_val);
+	var id_trans = $('[name="check_out_transaction"] [name="id_trans"]').val(),
+		link_url = base_url+'json_data/cost?destination='+city_id_val+'&destinationType=city&id_trans='+id_trans+'&courier_id='+courier_id_val;
+	if (parseInt(subdistrict_id_val)>0) {
+		link_url = base_url+'json_data/cost?destination='+subdistrict_id_val+'&destinationType=subdistrict&id_trans='+id_trans+'&courier_id='+courier_id_val;
+	}
+    load_courier_services(link_url)
+  }else{
+    courier_option();
+  };
 }
-if ($('.courier_option').length>0) {
+if ($('.courier_option').length>0 && $('[cart-courier-active-address]')==undefined) {
   courier_option();
 }
 
