@@ -2059,10 +2059,3 @@ function after_submit(form_name,data){
   }
 }	
 
-/*
-
-html2canvas(document.querySelector("#html-capture")).then(canvas => {
-    document.body.appendChild(canvas)
-});
-
-*/
